@@ -1,0 +1,70 @@
+version: '3.8'
+
+services:
+  frontend:
+    # uncomment the following line if you want to run a local instance of MongoDB
+    depends_on:
+      - db
+
+    build:
+      context: .
+      dockerfile: Dockerfile
+    
+    # do port mapping so that we can access the app from the browser
+    ports:
+      - 3000:3000
+    
+    environment: 
+      DB_URL: mongodb://db/tasked
+
+    # use docker compose to watch for changes and rebuild the container
+    develop:
+      watch:
+        - path: ./package.json
+          action: rebuild
+        - path: ./next.config.js
+          action: rebuild
+        - path: ./package-lock.json
+          action: rebuild
+        - path: .
+          target: /app
+          action: sync
+    
+    # define the environment variables
+    # environment:
+    #   # we're using MongoDB atlas so we need to pass in the connection string
+    #   DB_URL: mongodb+srv://sujata:rnZzJjIDr3bIDymV@cluster0.hnn88vs.mongodb.net/ 
+
+
+    # we're using MongoDB atlas so we don't need to run a local instance of MongoDB
+    # but if you want to run a local instance, you can do it this way
+    # db:
+    #   image: mongo
+    #   ports:
+    #     - 27017:27017
+    #   environment:
+    #     - MONGO_INITDB_ROOT_USERNAME=sujata
+    #     - MONGO_INITDB_ROOT_PASSWORD=rnZzJjIDr3bIDymV
+    #   volumes:
+    #     - tasked:/data/db
+  db:
+    # specify the image to use for the db service from docker hub. If we have a custom image, we can specify that in this format
+    # In the above two services, we're using the build context to build the image for the service from the Dockerfile so we specify the image as "build: ./frontend" or "build: ./backend".
+    # but for the db service, we're using the image from docker hub so we specify the image as "image: mongo:latest"
+    # you can find the image name and tag for mongodb from docker hub here: https://hub.docker.com/_/mongo
+    image: mongo:latest
+
+    # specify the ports to expose for the db service
+    # generally, we do this in api service using mongodb atlas. But for demo purposes, we're using a local mongodb instance
+    # usually, mongodb runs on port 27017. So we're exposing the port 27017 on the host machine and mapping it to the port 27017 inside the container
+    ports:
+      - 27017:27017
+
+    # specify the volumes to mount for the db service
+    # we're mounting the volume named "anime" inside the container at /data/db directory
+    # this is done so that the data inside the mongodb container is persisted even if the container is stopped
+    volumes:
+      - tasked:/data/db
+    
+volumes:
+  tasked:
