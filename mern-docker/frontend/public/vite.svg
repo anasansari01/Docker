@@ -1,0 +1,32 @@
+<svg width="200" height="60" viewBox="0 0 200 60" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="animeGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff4ecd" />
+      <stop offset="100%" stop-color="#6e6eff" />
+    </linearGradient>
+    <style>
+      .title {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        font-weight: 900;
+        font-size: 28px;
+        fill: url(#animeGradient);
+        text-shadow: 2px 2px #00000022;
+      }
+      .glow {
+        fill: none;
+        stroke: url(#animeGradient);
+        stroke-width: 2;
+        stroke-dasharray: 4,2;
+        animation: dash 3s linear infinite;
+      }
+
+      @keyframes dash {
+        to {
+          stroke-dashoffset: 100;
+        }
+      }
+    </style>
+  </defs>
+  <text x="10" y="40" class="title">ANIMEVERSE</text>
+  <rect x="5" y="5" width="190" height="50" rx="10" ry="10" class="glow" />
+</svg>
